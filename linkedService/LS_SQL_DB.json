@@ -1,0 +1,23 @@
+{
+	"name": "LS_SQL_DB",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sql-server-hospital.database.windows.net",
+			"database": "free-sql-db-1450877",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "kunal",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_SQL_KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "az-sql-pass"
+			}
+		}
+	}
+}
