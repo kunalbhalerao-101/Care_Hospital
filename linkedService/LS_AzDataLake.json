@@ -1,0 +1,10 @@
+{
+	"name": "LS_AzDataLake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://azdatalake99.dfs.core.windows.net/"
+		}
+	}
+}
