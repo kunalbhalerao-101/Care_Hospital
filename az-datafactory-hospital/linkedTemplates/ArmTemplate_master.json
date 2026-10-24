@@ -11,17 +11,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS'"
 		},
-		"LS_SQL_DB_properties_typeProperties_server": {
+		"AzureDatabricks_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "sql-server-hospital.database.windows.net"
+			"defaultValue": "1024-082312-sqbfycuz"
 		},
-		"LS_SQL_DB_properties_typeProperties_database": {
+		"LS_ADLS_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "free-sql-db-1450877"
-		},
-		"LS_SQL_DB_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "kunal"
+			"defaultValue": "https://azdatalake99.dfs.core.windows.net/"
 		},
 		"LS_KeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -39,13 +35,17 @@
 			"type": "string",
 			"defaultValue": "neondb_owner"
 		},
-		"LS_ADLS_properties_typeProperties_url": {
+		"LS_SQL_DB_properties_typeProperties_server": {
 			"type": "string",
-			"defaultValue": "https://azdatalake99.dfs.core.windows.net/"
+			"defaultValue": "sql-server-hospital.database.windows.net"
 		},
-		"AzureDatabricks_properties_typeProperties_existingClusterId": {
+		"LS_SQL_DB_properties_typeProperties_database": {
 			"type": "string",
-			"defaultValue": "1024-082312-sqbfycuz"
+			"defaultValue": "free-sql-db-1450877"
+		},
+		"LS_SQL_DB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "kunal"
 		},
 		"containerUri": {
 			"type": "string",
@@ -77,20 +77,14 @@
 					"LS_ADLS_accountKey": {
 						"value": "[parameters('LS_ADLS_accountKey')]"
 					},
-					"LS_KeyVault_properties_typeProperties_baseUrl": {
-						"value": "[parameters('LS_KeyVault_properties_typeProperties_baseUrl')]"
-					},
 					"LS_ADLS_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_properties_typeProperties_url')]"
 					},
-					"LS_SQL_DB_properties_typeProperties_server": {
-						"value": "[parameters('LS_SQL_DB_properties_typeProperties_server')]"
+					"LS_KeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('LS_KeyVault_properties_typeProperties_baseUrl')]"
 					},
-					"LS_SQL_DB_properties_typeProperties_database": {
-						"value": "[parameters('LS_SQL_DB_properties_typeProperties_database')]"
-					},
-					"LS_SQL_DB_properties_typeProperties_userName": {
-						"value": "[parameters('LS_SQL_DB_properties_typeProperties_userName')]"
+					"AzureDatabricks_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks_properties_typeProperties_existingClusterId')]"
 					},
 					"LS_PostgreSql_Source_properties_typeProperties_server": {
 						"value": "[parameters('LS_PostgreSql_Source_properties_typeProperties_server')]"
@@ -101,8 +95,14 @@
 					"LS_PostgreSql_Source_properties_typeProperties_username": {
 						"value": "[parameters('LS_PostgreSql_Source_properties_typeProperties_username')]"
 					},
-					"AzureDatabricks_properties_typeProperties_existingClusterId": {
-						"value": "[parameters('AzureDatabricks_properties_typeProperties_existingClusterId')]"
+					"LS_SQL_DB_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQL_DB_properties_typeProperties_server')]"
+					},
+					"LS_SQL_DB_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQL_DB_properties_typeProperties_database')]"
+					},
+					"LS_SQL_DB_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQL_DB_properties_typeProperties_userName')]"
 					}
 				}
 			},
