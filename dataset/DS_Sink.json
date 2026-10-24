@@ -2,7 +2,7 @@
 	"name": "DS_Sink",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_AzDataLake",
+			"referenceName": "LS_ADLS",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {

@@ -80,6 +80,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "PostgreSqlV2Source",
+						"query": {
+							"value": "Select *\nfrom @{activity('Lookup').output.firstRow.source_schema_name}.@{activity('Lookup').output.firstRow.source_table_name}",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00"
 					},
 					"sink": {
@@ -106,7 +110,17 @@
 				"inputs": [
 					{
 						"referenceName": "DS_PostgreSql_source",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"schema": {
+								"value": "@activity('Lookup').output.firstRow.source_schema_name",
+								"type": "Expression"
+							},
+							"tablename": {
+								"value": "@activity('Lookup').output.firstRow.source_table_name",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
@@ -120,7 +134,7 @@
 								"type": "Expression"
 							},
 							"Filename": {
-								"value": "@concat(\n    activity('Lookup').output.firstRow.source_table_name,'-',\n    variables('Start Time')\n)",
+								"value": "@concat(\n    activity('Lookup').output.firstRow.source_table_name,' | ',\n    variables('Start Time')\n)",
 								"type": "Expression"
 							}
 						}

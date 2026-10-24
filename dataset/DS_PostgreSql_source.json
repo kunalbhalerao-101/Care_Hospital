@@ -2,8 +2,16 @@
 	"name": "DS_PostgreSql_source",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_PostgreSql",
+			"referenceName": "LS_PostgreSql_Source",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schema": {
+				"type": "string"
+			},
+			"tablename": {
+				"type": "string"
+			}
 		},
 		"folder": {
 			"name": "Hospital DS"
@@ -12,8 +20,14 @@
 		"type": "PostgreSqlV2Table",
 		"schema": [],
 		"typeProperties": {
-			"schema": "public",
-			"table": "hospitals"
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().tablename",
+				"type": "Expression"
+			}
 		}
 	}
 }
