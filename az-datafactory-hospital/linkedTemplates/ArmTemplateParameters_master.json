@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "az-datafactory-hospital"
+		},
+		"LS_ADLS_accountKey": {
+			"value": ""
+		},
+		"LS_SQL_DB_properties_typeProperties_server": {
+			"value": "sql-server-hospital.database.windows.net"
+		},
+		"LS_SQL_DB_properties_typeProperties_database": {
+			"value": "free-sql-db-1450877"
+		},
+		"LS_SQL_DB_properties_typeProperties_userName": {
+			"value": "kunal"
+		},
+		"LS_KeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://HospitalxPassword.vault.azure.net/"
+		},
+		"LS_PostgreSql_Source_properties_typeProperties_server": {
+			"value": "ep-spring-base-a173i08o-pooler.ap-southeast-1.aws.neon.tech"
+		},
+		"LS_PostgreSql_Source_properties_typeProperties_database": {
+			"value": "neondb"
+		},
+		"LS_PostgreSql_Source_properties_typeProperties_username": {
+			"value": "neondb_owner"
+		},
+		"LS_ADLS_properties_typeProperties_url": {
+			"value": "https://azdatalake99.dfs.core.windows.net/"
+		},
+		"AzureDatabricks_properties_typeProperties_existingClusterId": {
+			"value": "1024-082312-sqbfycuz"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
