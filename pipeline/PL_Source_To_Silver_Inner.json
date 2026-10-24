@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "Select \n*\nfrom ctrl.table_config\nWhere @{pipeline().parameters.table_id} = 1;\n",
+							"value": "Select \n*\nfrom ctrl.table_config\nWhere table_id = @{pipeline().parameters.table_id};\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -53,13 +53,13 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Read Table Details",
+						"activity": "Set variable",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "Set variable",
+						"activity": "Read Table Details",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -77,7 +77,7 @@
 					"source": {
 						"type": "PostgreSqlV2Source",
 						"query": {
-							"value": "Select *\nfrom\n@{activity('Read Table Details').output.firstRow.source_schema_name}.@{activity('Read Table Details').output.firstRow.source_table_name}",
+							"value": "Select *\nfrom @{activity('Read Table Details').output.firstRow.source_schema_name}.@{activity('Read Table Details').output.firstRow.source_table_name}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00"
@@ -233,7 +233,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "UPDATE ctrl.audit_log\nSet STATUS = 'SUCCESS', end_time = SYSUTCDATETIME(), records_written = @{activity('Bronze to Silver').output.runOutput}\nWhere @{pipeline().parameters.adf_run_id} = 'A2' AND table_id = @{pipeline().parameters.table_id};\n",
+								"value": "UPDATE ctrl.audit_log\nSet STATUS = 'SUCCESS', end_time = SYSUTCDATETIME(), records_written = @{activity('Bronze to Silver').output.runOutput}\nWhere adf_run_id = '@{pipeline().parameters.adf_run_id}' AND table_id = @{pipeline().parameters.table_id};\n",
 								"type": "Expression"
 							}
 						}
