@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "Select \ntable_id\nfrom @{pipeline().parameters.schema}.@{pipeline().parameters.table_name}\nwhere is_active = 1 AND source_system = '@{pipeline().parameters.source_system}';",
+							"value": "Select \ntable_id\nfrom @{pipeline().parameters.schema}.@{pipeline().parameters.config_table}\nwhere is_active = 1 AND source_system = '@{pipeline().parameters.source_system}';",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -33,7 +33,7 @@
 								"type": "Expression"
 							},
 							"Tablename": {
-								"value": "@pipeline().parameters.table_name",
+								"value": "@pipeline().parameters.config_table",
 								"type": "Expression"
 							}
 						}
@@ -63,7 +63,14 @@
 						{
 							"name": "Ingest from Source to Silver",
 							"type": "ExecutePipeline",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Insert in progress status",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"secureInput": false
 							},
@@ -78,15 +85,17 @@
 									"table_id": {
 										"value": "@item().table_id",
 										"type": "Expression"
+									},
+									"adf_run_id": {
+										"value": "@pipeline().parameters.adf_run_id",
+										"type": "Expression"
 									}
 								}
 							}
 						},
 						{
-							"name": "Script",
+							"name": "Insert in progress status",
 							"type": "Script",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
@@ -103,7 +112,47 @@
 							"typeProperties": {
 								"scripts": [
 									{
-										"type": "Query"
+										"type": "Query",
+										"text": {
+											"value": "Insert into @{pipeline().parameters.schema}.@{pipeline().parameters.audit_table} \n(\nadf_run_id,\ntable_id,\nstage,\nstatus,\nstart_time)\nVALUES \n('@{pipeline().parameters.adf_run_id}','@{item().table_id}','SOURCE_TO_SILVER','IN_PROGRESS',sysutcdatetime());",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "Update Failed",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "Ingest from Source to Silver",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "LS_SQL_DB",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "UPDATE ctrl.audit_log\nSET STATUS  = 'FAILED' , end_time = SYSDATETIME()\nWHERE adf_run_id = '@{pipeline().parameters.adf_run_id}' AND table_id = @{item().table_id}",
+											"type": "Expression"
+										}
 									}
 								],
 								"scriptBlockExecutionTimeout": "02:00:00"
@@ -122,9 +171,17 @@
 				"type": "string",
 				"defaultValue": "ctrl"
 			},
-			"table_name": {
+			"config_table": {
 				"type": "string",
 				"defaultValue": "table_config"
+			},
+			"audit_table": {
+				"type": "string",
+				"defaultValue": "audit_log"
+			},
+			"adf_run_id": {
+				"type": "string",
+				"defaultValue": "A2"
 			}
 		},
 		"variables": {
