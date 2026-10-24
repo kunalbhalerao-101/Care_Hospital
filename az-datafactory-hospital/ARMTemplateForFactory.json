@@ -324,7 +324,7 @@
 							"source": {
 								"type": "AzureSqlSource",
 								"sqlReaderQuery": {
-									"value": "Select \ntable_id\nfrom ctrl.table_config\nwhere is_active = 1 AND source_system = '@{pipeline().parameters.source_system}';",
+									"value": "Select \ntable_id\nfrom @{pipeline().parameters.schema}.@{pipeline().parameters.table_name}\nwhere is_active = 1 AND source_system = '@{pipeline().parameters.source_system}';",
 									"type": "Expression"
 								},
 								"queryTimeout": "02:00:00",
@@ -334,8 +334,14 @@
 								"referenceName": "DS_AZ_SQL_Source",
 								"type": "DatasetReference",
 								"parameters": {
-									"Schema": "ctrl",
-									"Tablename": "table_config"
+									"Schema": {
+										"value": "@pipeline().parameters.schema",
+										"type": "Expression"
+									},
+									"Tablename": {
+										"value": "@pipeline().parameters.table_name",
+										"type": "Expression"
+									}
 								}
 							},
 							"firstRowOnly": false
@@ -374,7 +380,39 @@
 											"type": "PipelineReference"
 										},
 										"waitOnCompletion": true,
-										"parameters": {}
+										"parameters": {
+											"table_id": {
+												"value": "@item().table_id",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								{
+									"name": "Script",
+									"type": "Script",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 2,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"linkedServiceName": {
+										"referenceName": "LS_SQL_DB",
+										"type": "LinkedServiceReference"
+									},
+									"typeProperties": {
+										"scripts": [
+											{
+												"type": "Query"
+											}
+										],
+										"scriptBlockExecutionTimeout": "02:00:00"
 									}
 								}
 							]
@@ -388,6 +426,14 @@
 					"source_system": {
 						"type": "string",
 						"defaultValue": "neon_postgres"
+					},
+					"schema": {
+						"type": "string",
+						"defaultValue": "ctrl"
+					},
+					"table_name": {
+						"type": "string",
+						"defaultValue": "table_config"
 					}
 				},
 				"variables": {
@@ -402,7 +448,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_AZ_SQL_Source')]",
-				"[concat(variables('factoryId'), '/pipelines/PL_source_to_silver_inner')]"
+				"[concat(variables('factoryId'), '/pipelines/PL_source_to_silver_inner')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQL_DB')]"
 			]
 		},
 		{
