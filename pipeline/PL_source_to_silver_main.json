@@ -63,14 +63,7 @@
 						{
 							"name": "Ingest from Source to Silver",
 							"type": "ExecutePipeline",
-							"dependsOn": [
-								{
-									"activity": "Script",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"secureInput": false
 							},
@@ -92,6 +85,8 @@
 						{
 							"name": "Script",
 							"type": "Script",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
