@@ -284,6 +284,44 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "Ingest all tables",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Read Source Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Read Source Tables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "test",
+										"value": {
+											"value": "@string(item().table_id)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -293,6 +331,11 @@
 					"source_system": {
 						"type": "string",
 						"defaultValue": "neon_postgres"
+					}
+				},
+				"variables": {
+					"test": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -383,6 +426,21 @@
 				"[concat(variables('factoryId'), '/datasets/PostgreSql_Source')]",
 				"[concat(variables('factoryId'), '/datasets/ADLS_Sink')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Hospital PL"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
 		}
 	]
 }
