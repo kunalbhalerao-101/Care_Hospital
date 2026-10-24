@@ -380,7 +380,7 @@
 							"source": {
 								"type": "AzureSqlSource",
 								"sqlReaderQuery": {
-									"value": "Select *\nfrom ctrl.table_config\nwhere table_id <=3;",
+									"value": "Select *\nfrom ctrl.table_config\nwhere @{pipeline().parameters.table_id} =1;",
 									"type": "Expression"
 								},
 								"queryTimeout": "02:00:00",
@@ -585,6 +585,12 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"parameters": {
+					"table_id": {
+						"type": "string",
+						"defaultValue": "1"
+					}
+				},
 				"variables": {
 					"Start Time": {
 						"type": "String"
@@ -661,20 +667,20 @@
 							"isSequential": false,
 							"activities": [
 								{
-									"name": "Set variable",
-									"type": "SetVariable",
+									"name": "Ingest from Source to Silver",
+									"type": "ExecutePipeline",
 									"dependsOn": [],
 									"policy": {
-										"secureOutput": false,
 										"secureInput": false
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"variableName": "test",
-										"value": {
-											"value": "@string(item().table_id)",
-											"type": "Expression"
-										}
+										"pipeline": {
+											"referenceName": "PL_source_to_silver_inner",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
 									}
 								}
 							]
@@ -701,7 +707,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_AZ_SQL_Source')]"
+				"[concat(variables('factoryId'), '/datasets/DS_AZ_SQL_Source')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_source_to_silver_inner')]"
 			]
 		}
 	]
