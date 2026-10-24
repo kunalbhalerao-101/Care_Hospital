@@ -1,0 +1,45 @@
+{
+	"name": "PL_Source_To_Silver_Inner",
+	"properties": {
+		"activities": [
+			{
+				"name": "Read Table Details",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "Select \ntable_id\nfrom ctrl.table_config\nWhere @{pipeline().parameters.table_id} = 1;\n",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSql_Source",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"parameters": {
+			"table_id": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Hospital PL"
+		},
+		"annotations": []
+	}
+}
