@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "Select *\nfrom ctrl.table_config\nwhere table_id <=3;",
+							"value": "Select *\nfrom ctrl.table_config\nwhere @{pipeline().parameters.table_id} =1;",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -220,6 +220,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"table_id": {
+				"type": "string",
+				"defaultValue": "1"
+			}
+		},
 		"variables": {
 			"Start Time": {
 				"type": "String"
