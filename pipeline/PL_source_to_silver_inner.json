@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "Select *\nfrom ctrl.table_config\nwhere @{pipeline().parameters.table_id} =1;",
+							"value": "Select *\nfrom ctrl.table_config\nwhere @{pipeline().parameters.table_id} >= 3;",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -222,14 +222,9 @@
 			{
 				"name": "Update Sucess",
 				"type": "Script",
-				"dependsOn": [
-					{
-						"activity": "Bronze to Silver",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 2,
@@ -258,8 +253,7 @@
 		],
 		"parameters": {
 			"table_id": {
-				"type": "string",
-				"defaultValue": "1"
+				"type": "string"
 			},
 			"adf_run_id": {
 				"type": "string",
