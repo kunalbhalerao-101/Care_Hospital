@@ -1,0 +1,46 @@
+{
+	"name": "PL_Source_To_Bronze_Main",
+	"properties": {
+		"activities": [
+			{
+				"name": "Read Source Tables",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "Select \ntable_id\nfrom ctrl.table_config\nWhere is_active = 1 AND source_system = '@{pipeline().parameters.source_system}';\n",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSql_Source",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"parameters": {
+			"source_system": {
+				"type": "string",
+				"defaultValue": "neon_postgres"
+			}
+		},
+		"folder": {
+			"name": "Hospital PL"
+		},
+		"annotations": []
+	}
+}
