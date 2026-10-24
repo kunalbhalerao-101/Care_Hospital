@@ -53,7 +53,7 @@
 				}
 			},
 			{
-				"name": "Copy data",
+				"name": "Source to Sink Ingestion",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -130,7 +130,7 @@
 						"parameters": {
 							"Container": "sink",
 							"Folder": {
-								"value": "@concat(\n    activity('Lookup').output.firstRow.source_system,\n    '/',\n    activity('Lookup').output.firstRow.source_table_name\n)",
+								"value": "@concat(\n    activity('Lookup').output.firstRow.source_system,\n    '/',\n    activity('Lookup').output.firstRow.source_table_name,\n    '/',\n    variables('Start Time')\n)",
 								"type": "Expression"
 							},
 							"Filename": {
@@ -140,6 +140,84 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Sink to Bronze",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Source to Sink Ingestion",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/kbhalerao1966@gmail.com/Care_Hospital---az-Databricks-repo/Sink to Bronze",
+					"baseParameters": {
+						"source_system": {
+							"value": "@activity('Lookup').output.firstRow.source_system",
+							"type": "Expression"
+						},
+						"table_name": {
+							"value": "@activity('Lookup').output.firstRow.bronze_table_name",
+							"type": "Expression"
+						},
+						"landing_timestamp": {
+							"value": "@variables('Start Time')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Bronze to Silver",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Sink to Bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/kbhalerao1966@gmail.com/Care_Hospital---az-Databricks-repo/Bronze to Silver",
+					"baseParameters": {
+						"table_name": {
+							"value": "@activity('Lookup').output.firstRow.silver_table_name",
+							"type": "Expression"
+						},
+						"landing_timestamp": {
+							"value": "@variables('Start Time')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"variables": {
