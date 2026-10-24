@@ -43,11 +43,7 @@
 				"inputs": [
 					{
 						"referenceName": "DS_PostgreSql_source",
-						"type": "DatasetReference",
-						"parameters": {
-							"Schema": "public",
-							"TableName": "hospitals"
-						}
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
