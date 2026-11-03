@@ -317,7 +317,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"on": {
-						"value": "@activity('Read Last Watermark').output.firstRow.source_system",
+						"value": "@activity('Read Table Details').output.firstRow.source_system",
 						"type": "Expression"
 					},
 					"cases": [
