@@ -437,7 +437,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"FolderName": {
-													"value": "@activity('Read Last Watermark').output.firstRow.source_path",
+													"value": "@activity('Read Table Details').output.firstRow.source_path",
 													"type": "Expression"
 												},
 												"Container": "source"
