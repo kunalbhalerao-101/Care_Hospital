@@ -7,13 +7,17 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "az-datafactory-hospital"
 		},
+		"AzureDatabricks_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks'"
+		},
 		"LS_ADLS_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS'"
 		},
 		"AzureDatabricks_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "1024-082312-sqbfycuz"
+			"defaultValue": "1108-091535-jcjy0syj"
 		},
 		"LS_ADLS_properties_typeProperties_url": {
 			"type": "string",
@@ -74,17 +78,20 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureDatabricks_accessToken": {
+						"value": "[parameters('AzureDatabricks_accessToken')]"
+					},
 					"LS_ADLS_accountKey": {
 						"value": "[parameters('LS_ADLS_accountKey')]"
+					},
+					"AzureDatabricks_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks_properties_typeProperties_existingClusterId')]"
 					},
 					"LS_ADLS_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_properties_typeProperties_url')]"
 					},
 					"LS_KeyVault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('LS_KeyVault_properties_typeProperties_baseUrl')]"
-					},
-					"AzureDatabricks_properties_typeProperties_existingClusterId": {
-						"value": "[parameters('AzureDatabricks_properties_typeProperties_existingClusterId')]"
 					},
 					"LS_PostgreSql_Source_properties_typeProperties_server": {
 						"value": "[parameters('LS_PostgreSql_Source_properties_typeProperties_server')]"
