@@ -136,7 +136,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"notebookPath": {
-									"value": "/Care_Hospital---az-Databricks-repo/Gold/NB_@{item().gold_table_name}",
+									"value": "/Workspace/Users/kbhalerao1966@gmail.com/Care_Hospital---az-Databricks-repo/Gold/NB_@{item().gold_table_name}",
 									"type": "Expression"
 								}
 							},
