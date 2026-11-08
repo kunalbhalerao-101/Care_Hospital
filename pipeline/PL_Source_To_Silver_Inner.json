@@ -453,11 +453,7 @@
 													"value": "@concat(\n    activity('Read Table Details').output.firstRow.source_system,\n    '/',\n    activity('Read Table Details').output.firstRow.source_table_name,\n    '/',\n    variables('Start_Time')\n)",
 													"type": "Expression"
 												},
-												"Container": "sink",
-												"FileName": {
-													"value": "@concat(\n    activity('Read Table Details').output.firstRow.source_table_name,' | ',\n    variables('Start_Time')\n)",
-													"type": "Expression"
-												}
+												"Container": "sink"
 											}
 										}
 									]
